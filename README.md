@@ -2,6 +2,27 @@
 
 Custom, Windows-friendly ports and utilities that I build for my Windows setup. 🪟
 
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/Windows_logo_-_2021.svg" alt="Windows logo" width="110">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" alt="Linux Tux mascot" width="110">
+</div>
+
+<div align="center">
+  <strong>Windows + Linux tooling, because why pick one? 🪟🐧</strong>
+</div>
+
+## Platform SVGs
+
+The README uses SVG artwork for both platforms:
+
+- **Windows:** Windows 11-era logo, sourced from Wikimedia Commons.
+- **Linux:** Tux, the Linux mascot, sourced from Wikimedia Commons.
+
+Windows SVG: https://commons.wikimedia.org/wiki/File:Windows_logo_-_2021.svg  
+Linux SVG: https://commons.wikimedia.org/wiki/File:Tux.svg
+
+The Windows logo is listed by Wikimedia Commons as public domain, with trademark restrictions still potentially applying. Tux is used with the attribution requirements listed on its source page; attribution is retained here for reference. citeturn8view0turn5view0
+
 ## Packages
 
 ### newfetch
