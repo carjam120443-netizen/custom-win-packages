@@ -1,9 +1,11 @@
 param([switch]$NoColor,[switch]$Short,[switch]$Help)
+
 if ($Help) {
   Write-Host "newfetch - native Windows system information"
   Write-Host "Usage: newfetch [-Short] [-NoColor]"
   exit
 }
+
 $os=Get-CimInstance Win32_OperatingSystem
 $cs=Get-CimInstance Win32_ComputerSystem
 $cpu=Get-CimInstance Win32_Processor | Select-Object -First 1
@@ -21,6 +23,7 @@ $shell="PowerShell $($PSVersionTable.PSVersion)"
 $terminal=if($env:WT_SESSION){"Windows Terminal"}elseif($env:TERM_PROGRAM){$env:TERM_PROGRAM}else{"Console Host"}
 $edition=(Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -ErrorAction SilentlyContinue).ProductName
 if(-not $edition){$edition=$os.Caption}
+
 $lines=@(
   @{Label="OS";Value="$edition (Build $($os.BuildNumber))"},
   @{Label="Host";Value="$($cs.Manufacturer) $($cs.Model)"},
@@ -34,34 +37,50 @@ $lines=@(
   @{Label="Memory";Value="$ramUsed GiB / $ramTotal GiB ($ramPct%)"},
   @{Label="Disk";Value=("{0} GiB free / {1} GiB" -f [math]::Round($disk.FreeSpace/1GB,1),[math]::Round($disk.Size/1GB,1))}
 )
+
 if($Short){Write-Host "newfetch | $edition | $($cpu.Name.Trim()) | RAM $ramUsed/$ramTotal GiB | GPU $gpuNames";exit}
+
+# ASCII-only logo keeps Windows PowerShell 5.1 from mangling Unicode block characters.
 $logo=@(
-"        ████████████████  ████████████████",
-"        ████████████████  ████████████████",
-"        ████████████████",
-"        ████████████████",
-"        ████████████████  ████████████████",
-"        ████████████████  ████████████████",
-"                                ████████████████",
-"                                ████████████████",
-"        ████████████████████████████████████",
-"        ████████████████████████████████████"
+"      .--------.",
+"      | NEW    |",
+"      | FETCH  |",
+"      |--------|",
+"      | WINDOWS|",
+"      '--------'"
 )
-$maxLabel=($lines.Label|Measure-Object Length -Maximum).Maximum
-$width=$maxLabel+2
+
+$labelWidth=(($lines.Label | Measure-Object Length -Maximum).Maximum)+2
+$logoWidth=($logo | ForEach-Object {$_.Length} | Measure-Object -Maximum).Maximum
+$gap=4
+$rightStart=$logoWidth+$gap
+
+# Respect the current terminal width when possible.
+$consoleWidth=try {[Console]::WindowWidth} catch {120}
+if($consoleWidth -lt 60){$consoleWidth=60}
+$maxValueWidth=[math]::Max(20,$consoleWidth-$rightStart-$labelWidth-2)
+
 for($i=0;$i -lt [math]::Max($logo.Count,$lines.Count);$i++){
   $left=if($i -lt $logo.Count){$logo[$i]}else{""}
-  $right=if($i -lt $lines.Count){$lines[$i].Label.PadRight($width)+$lines[$i].Value}else{""}
-  if($NoColor){Write-Host ("{0,-48} {1}" -f $left,$right)}
-  else {
-    Write-Host ("{0,-48}" -f $left) -NoNewline -ForegroundColor Blue
+  if($i -lt $lines.Count){
+    $value=[string]$lines[$i].Value
+    if($value.Length -gt $maxValueWidth){
+      $value=$value.Substring(0,$maxValueWidth-3)+"..."
+    }
+    $right=$lines[$i].Label.PadRight($labelWidth)+$value
+  }else{$right=""}
+
+  if($NoColor){
+    Write-Host ($left.PadRight($rightStart)+$right)
+  }else{
+    Write-Host $left.PadRight($rightStart) -NoNewline -ForegroundColor Blue
     if($right){Write-Host $right -ForegroundColor Gray}else{Write-Host ""}
   }
 }
+
+Write-Host ""
 if($NoColor){
-  Write-Host ""
-  Write-Host "  newfetch • native PowerShell Windows port"
+  Write-Host "  newfetch - native PowerShell Windows port"
 }else{
-  Write-Host ""
-  Write-Host "  newfetch • native PowerShell Windows port" -ForegroundColor DarkCyan
+  Write-Host "  newfetch - native PowerShell Windows port" -ForegroundColor DarkCyan
 }
