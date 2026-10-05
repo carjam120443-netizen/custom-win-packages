@@ -1,0 +1,38 @@
+name: Build package ZIP
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    if: "!startsWith(github.event.head_commit.message, 'Update package bundle')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create package ZIP
+        run: |
+          rm -f custom-win-packages.zip
+          zip -r custom-win-packages.zip \
+            newfetch which pkg commenter starship starinit and \
+            README.md windows-logo.svg open-source.svg \
+            .gitignore \
+            -x "*.git/*"
+
+      - name: Commit ZIP
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add custom-win-packages.zip
+          if git diff --cached --quiet; then
+            echo "ZIP is already up to date."
+            exit 0
+          fi
+          git commit -m "Update package bundle"
+          git push
