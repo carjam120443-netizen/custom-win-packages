@@ -86,6 +86,28 @@ pkg --version
 
 Under the hood, `pkg` simply passes its arguments to `winget.exe`, so no separate package manager is installed.
 
+### commenter
+
+A tiny comment helper for PowerShell.
+
+Run `commenter "text"` to print a comment in the custom syntax:
+
+```powershell
+commenter "comment-example"
+# Output:
+# /*"comment-example"*/
+```
+
+The PowerShell profile also adds an interactive PSReadLine shortcut for standalone comment lines. When you type a line matching:
+
+```text
+/*"comment-example"*/
+```
+
+and press Enter, the line is treated as a non-command comment and is not executed. The same pattern works with whatever text you put between the quotes.
+
+This interactive syntax is handled before PowerShell parses the line, so it does not require changing PowerShell itself.
+
 ### Installation
 
 Clone or download the repository, then place the package directory somewhere on your PATH.
@@ -104,6 +126,10 @@ which/
 pkg/
 ├── pkg.cmd
 └── pkg.ps1
+
+commenter/
+├── commenter.cmd
+└── commenter.ps1
 ```
 
 The included `.cmd` launchers run the PowerShell implementations or native Windows commands directly.
