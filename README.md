@@ -143,3 +143,50 @@ The original Neofetch is a Bash-based project. This repository is for Windows-na
 ## License
 
 Individual files may have their own licensing information. Check the file and repository history before redistributing a component.
+
+
+### Starship
+
+A Windows-native install of **Starship** plus an original Linux-like theme for PowerShell.
+
+Starship itself is the upstream cross-shell prompt project; this repository does **not** repackage or modify its source code. The Windows x64 executable is installed separately from the official Starship v1.26.0 release.
+
+**Installed executable:**
+```text
+C:\Users\carja\.cargo\bin\starship.exe
+```
+
+**Upstream:** https://github.com/starship/starship  
+**Upstream release:** v1.26.0  
+**Upstream license:** ISC License
+
+**Theme:**
+```text
+starship/
+├── linux-like.toml
+└── README.md
+```
+
+The theme is an original configuration designed to make PowerShell look more like a traditional Linux shell:
+
+```text
+┌──carja@carsonswin10─~/project   main
+└─❯
+```
+
+To test it without replacing the current prompt configuration:
+
+```powershell
+$env:STARSHIP_CONFIG = "$HOME\.config\starship-linux-like.toml"
+starship prompt
+```
+
+To initialize Starship for the current PowerShell session:
+
+```powershell
+Invoke-Expression (&starship init powershell)
+```
+
+The existing Oh My Posh setup is left untouched, so Starship can be tested without removing the current themes.
+
+**Credit:** Starship and its contributors created the prompt engine. This repo only supplies the Windows setup and the original `linux-like.toml` configuration.
