@@ -19,7 +19,7 @@ $res=@(Get-CimInstance Win32_VideoController|Where-Object{$_.CurrentHorizontalRe
 $resText=if($res){$res -join " + "}else{"Unknown"}
 $shell="PowerShell $($PSVersionTable.PSVersion)"
 $terminal=if($env:WT_SESSION){"Windows Terminal"}elseif($env:TERM_PROGRAM){$env:TERM_PROGRAM}else{"Console Host"}
-$edition=(Get-ItemProperty "HKLM:SOFTWAREMicrosoftWindows NTCurrentVersion" -ErrorAction SilentlyContinue).ProductName
+$edition=(Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion" -ErrorAction SilentlyContinue).ProductName
 if(-not $edition){$edition=$os.Caption}
 $lines=@(
   @{Label="OS";Value="$edition (Build $($os.BuildNumber))"},
