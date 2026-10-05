@@ -31,9 +31,25 @@ newfetch -NoColor
 newfetch -Help
 ```
 
+### which
+
+A native PowerShell Windows port of the familiar Unix `which` command.
+
+`which` uses PowerShell's command resolution to find executables, scripts, cmdlets, functions, aliases, and other commands available in your environment.
+
+**Commands:**
+```powershell
+which powershell.exe
+which newfetch
+which git
+which not-a-command
+```
+
+If a command cannot be found, `which` reports that it was not found.
+
 ### Installation
 
-Clone or download the repository, then place the `newfetch` directory somewhere on your PATH.
+Clone or download the repository, then place the package directory somewhere on your PATH.
 
 For example:
 
@@ -41,9 +57,13 @@ For example:
 newfetch/
 ├── newfetch.cmd
 └── newfetch.ps1
+
+which/
+├── which.cmd
+└── which.ps1
 ```
 
-The included `newfetch.cmd` launcher runs the PowerShell implementation directly.
+The included `.cmd` launchers run the PowerShell implementations directly.
 
 No Scoop package is required.
 
