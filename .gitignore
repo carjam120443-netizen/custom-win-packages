@@ -1,0 +1,23 @@
+# Build and temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*.swo
+
+# PowerShell / Windows local files
+*.ps1~ 
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE files
+.vscode/
+.idea/
+
+# Local tooling output
+dist/
+build/
+
+# Do not commit local Starship config
+starship-local.toml
