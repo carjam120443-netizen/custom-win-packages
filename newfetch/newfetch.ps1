@@ -40,14 +40,18 @@ $lines=@(
 
 if($Short){Write-Host "newfetch | $edition | $($cpu.Name.Trim()) | RAM $ramUsed/$ramTotal GiB | GPU $gpuNames";exit}
 
-# ASCII-only logo keeps Windows PowerShell 5.1 from mangling Unicode block characters.
+# Four-pane ASCII Windows logo; rendered blue in normal mode.
 $logo=@(
-"      .--------.",
-"      | NEW    |",
-"      | FETCH  |",
-"      |--------|",
-"      | WINDOWS|",
-"      '--------'"
+"   +--------+  +--------+",
+"   |        |  |        |",
+"   |        |  |        |",
+"   |        |  |        |",
+"   +--------+  +--------+",
+"   +--------+  +--------+",
+"   |        |  |        |",
+"   |        |  |        |",
+"   |        |  |        |",
+"   +--------+  +--------+"
 )
 
 $labelWidth=(($lines.Label | Measure-Object Length -Maximum).Maximum)+2
@@ -55,7 +59,6 @@ $logoWidth=($logo | ForEach-Object {$_.Length} | Measure-Object -Maximum).Maximu
 $gap=4
 $rightStart=$logoWidth+$gap
 
-# Respect the current terminal width when possible.
 $consoleWidth=try {[Console]::WindowWidth} catch {120}
 if($consoleWidth -lt 60){$consoleWidth=60}
 $maxValueWidth=[math]::Max(20,$consoleWidth-$rightStart-$labelWidth-2)
