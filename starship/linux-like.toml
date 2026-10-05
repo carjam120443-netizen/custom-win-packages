@@ -1,0 +1,47 @@
+# Linux-like Starship theme for Windows PowerShell
+#
+# This is an original configuration for Starship.
+# Starship project: https://github.com/starship/starship
+# Starship is licensed under the ISC License.
+#
+# Designed to give Windows Terminal / PowerShell a traditional Linux-style prompt:
+#   ┌──user@host─~/path  git-branch (status)
+#   └─❯
+#
+add_newline = false
+format = "[┌──](bold green)[$username](bold green)[@](bold green)[$hostname](bold green)[─](bold green)[$directory](bold cyan) $git_branch$git_status$cmd_duration\n[└─](bold green)$character"
+
+[username]
+show_always = true
+format = "[$user]($style)"
+style_user = "bold green"
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style)"
+style = "bold green"
+
+[directory]
+style = "bold cyan"
+truncation_length = 3
+truncate_to_repo = false
+format = "[$path]($style)"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "bold red"
+format = "([$all_status$ahead_behind]($style))"
+
+[cmd_duration]
+min_time = 500
+style = "bold yellow"
+format = " [$duration]($style)"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[✗](bold red)"
+vimcmd_symbol = "[❮](bold yellow)"
