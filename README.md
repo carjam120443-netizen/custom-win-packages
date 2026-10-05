@@ -47,6 +47,24 @@ which not-a-command
 
 If a command cannot be found, `which` reports that it was not found.
 
+### pkg
+
+A Unix-style alias for **WinGet**.
+
+`pkg` is a lightweight wrapper around the Windows Package Manager, keeping WinGet's normal arguments and behavior while giving it a shorter, Unix-like command name.
+
+**Examples:**
+```powershell
+pkg search firefox
+pkg install Mozilla.Firefox
+pkg upgrade
+pkg list
+pkg uninstall Mozilla.Firefox
+pkg --version
+```
+
+Under the hood, `pkg` simply passes its arguments to `winget.exe`, so no separate package manager is installed.
+
 ### Installation
 
 Clone or download the repository, then place the package directory somewhere on your PATH.
@@ -61,9 +79,13 @@ newfetch/
 which/
 ├── which.cmd
 └── which.ps1
+
+pkg/
+├── pkg.cmd
+└── pkg.ps1
 ```
 
-The included `.cmd` launchers run the PowerShell implementations directly.
+The included `.cmd` launchers run the PowerShell implementations or native Windows commands directly.
 
 No Scoop package is required.
 
