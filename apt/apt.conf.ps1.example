@@ -1,0 +1,8 @@
+# apt shim configuration
+$defaults = @{
+    Source = 'winget'
+    Exact = $false
+    AcceptSourceAgreements = $false
+    AcceptPackageAgreements = $false
+    Silent = $false
+}
