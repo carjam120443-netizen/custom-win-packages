@@ -190,3 +190,20 @@ Invoke-Expression (&starship init powershell)
 The existing Oh My Posh setup is left untouched, so Starship can be tested without removing the current themes.
 
 **Credit:** Starship and its contributors created the prompt engine. This repo only supplies the Windows setup and the original `linux-like.toml` configuration.
+
+
+### shps
+
+A small **sh -> Windows PowerShell compatibility bridge**.
+
+`shps` runs common POSIX shell commands from PowerShell without requiring Bash, WSL, MSYS2, or Cygwin.
+
+**Examples:**
+```powershell
+shps -c "echo hello; pwd"
+shps -c "ls -la"
+shps -c "mkdir -p test"
+shps -File script.sh
+```
+
+It currently translates common commands including `echo`, `pwd`, `ls`, `cat`, `mkdir -p`, `rm -rf`, `cp`, `mv`, `touch`, and basic `$VAR` environment-variable syntax. It is a compatibility bridge rather than a full POSIX shell.
