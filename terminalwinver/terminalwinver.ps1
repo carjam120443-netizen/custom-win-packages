@@ -1,14 +1,14 @@
 # terminalwinver - clean Windows version display
-# Version: 0.1.1
+# Version: 0.1.2
 
 $os = Get-CimInstance -ClassName Win32_OperatingSystem
 
 $logo = @'
-  ██╗    ██╗
-  ╚██╗  ██╔╝
-   ╚████╔╝
-    ╚██╔╝
-     ╚═╝
+  +---+ +---+
+  |   | |   |
+  +---+ +---+
+  |   | |   |
+  +---+ +---+
 '@
 
 Write-Host $logo
