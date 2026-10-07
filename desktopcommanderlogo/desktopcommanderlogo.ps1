@@ -21,4 +21,4 @@ $B$B$B$B$B$B$UL$LR$B$B$B$B$B$B$B$DR$B$B$B$B$B$B$B$V$B$B$V  $B$B$DR   $B$B$V   $L
 $LL$H$H$H$H$H$LR $LL$H$H$H$H$H$H$LR$LL$H$H$H$H$H$H$LR$LL$H$LR  $LL$H$LR   $LL$H$LR    $LL$H$H$H$H$H$LR $LL$H$LR         $LL$H$H$H$H$H$LR $LL$H$H$H$H$H$LR $LL$H$LR     $LL$H$LR$LL$H$LR     $LL$H$LR$LL$H$LR  $LL$H$LR$LL$H$LR  $LL$H$H$H$LR$LL$H$H$H$H$H$LR $LL$H$H$H$H$H$H$LR$LL$H$LR  $LL$H$LR
 "@
 
-Write-Host $logo
+Write-Host $logo -ForegroundColor Blue
