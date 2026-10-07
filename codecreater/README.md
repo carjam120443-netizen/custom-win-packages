@@ -1,23 +1,37 @@
 # codecreater
 
-A small Windows PowerShell command for quickly creating a basic HTML website.
+Create an HTML website from supplied HTML code or interactively.
 
 ## Usage
 
-Run:
+Interactive:
 
-```text
+```
 codecreater
 ```
 
-It asks where to save the website, then asks for a title, heading, and main text.
+Then paste HTML line-by-line and enter `END` on its own line.
 
-You can also provide a path directly:
+Supply HTML directly:
 
-```text
-codecreater "C:\Users\carja\Desktop\mysite\index.html"
+```
+codecreater "<html><h1>Hello world</h1></html>"
 ```
 
-If the supplied path has no file extension, `index.html` is added automatically.
+The command then asks where to save the website and for a title.
 
-The generated file is UTF-8 and includes a responsive HTML/CSS starter page. PowerShell's `Set-Content` supports explicit UTF-8 encoding for file output.
+### Automatic formatting
+
+If HTML is supplied on one line, codecreater automatically detects common HTML tags, wraps them onto separate lines, and adds indentation.
+
+For example:
+
+```
+codecreater "<html><body><h1>Hello</h1><p>Test</p></body></html>"
+```
+
+becomes a readable multi-line HTML file.
+
+If the supplied HTML does not contain a `<title>`, codecreater adds one using the title you enter.
+
+Files are written as UTF-8.
