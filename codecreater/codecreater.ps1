@@ -1,5 +1,5 @@
 # codecreater - create HTML websites from supplied code
-# Version: 0.2.0
+# Version: 0.3.0
 
 param(
     [Parameter(ValueFromRemainingArguments = $true)]
@@ -45,10 +45,33 @@ if (-not $Code -or $Code.Count -eq 0) {
     $Code = @()
     Write-Host "codecreater interactive mode" -ForegroundColor Cyan
     Write-Host "Paste HTML code. Finish by entering a line containing only END." -ForegroundColor DarkGray
+    Write-Host "Opening tags automatically show their matching closing tag suggestion." -ForegroundColor DarkGray
+
+    $tagPairs = @{
+        html="</html>"; head="</head>"; body="</body>"; title="</title>"
+        main="</main>"; header="</header>"; footer="</footer>"; section="</section>"
+        article="</article>"; nav="</nav>"; div="</div>"; h1="</h1>"; h2="</h2>"
+        h3="</h3>"; h4="</h4>"; h5="</h5>"; h6="</h6>"; p="</p>"
+        ul="</ul>"; ol="</ol>"; li="</li>"; form="</form>"; button="</button>"
+        table="</table>"; tr="</tr>"; td="</td>"; th="</th>"; style="</style>"
+        script="</script>"
+    }
+
     while ($true) {
-        $line = Read-Host
+        $line = Read-Host "HTML"
         if ($line -eq 'END') { break }
+
         $Code += $line
+
+        # Show the matching closing tag for the newest opening tag.
+        $matches = [regex]::Matches($line, '(?i)<([a-z][a-z0-9-]*)(?:\s[^>]*)?>')
+        for ($i = $matches.Count - 1; $i -ge 0; $i--) {
+            $name = $matches[$i].Groups[1].Value.ToLowerInvariant()
+            if ($tagPairs.ContainsKey($name) -and $line -notmatch "(?i)</$name>") {
+                Write-Host "  ↳ auto-close suggestion: $($tagPairs[$name])" -ForegroundColor DarkCyan
+                break
+            }
+        }
     }
 }
 
