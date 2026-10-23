@@ -57,7 +57,8 @@ if not exist "%CYGWIN_ROOT%\bin\mintty.exe" (
   exit /b 2
 )
 start "Cygwin Terminal" "%CYGWIN_ROOT%\bin\mintty.exe" -i /Cygwin-Terminal.ico -
-'@.Replace('__CYGWIN_ROOT__', $Root)
+'@
+    $cygwinCmd = $cygwinCmd.Replace('__CYGWIN_ROOT__', $Root)
     $bashCmd = @'
 @echo off
 set "CYGWIN_ROOT=__CYGWIN_ROOT__"
@@ -66,7 +67,8 @@ if not exist "%CYGWIN_ROOT%\bin\bash.exe" (
   exit /b 2
 )
 "%CYGWIN_ROOT%\bin\bash.exe" --login -i %*
-'@.Replace('__CYGWIN_ROOT__', $Root)
+'@
+    $bashCmd = $bashCmd.Replace('__CYGWIN_ROOT__', $Root)
 
     Set-Content -LiteralPath (Join-Path $ScriptsDirectory 'cygwin.cmd') -Value $cygwinCmd -Encoding Ascii
     Set-Content -LiteralPath (Join-Path $ScriptsDirectory 'cygwin-bash.cmd') -Value $bashCmd -Encoding Ascii
