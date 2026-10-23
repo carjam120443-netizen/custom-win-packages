@@ -209,25 +209,31 @@ shps -File script.sh
 It currently translates common commands including `echo`, `pwd`, `ls`, `cat`, `mkdir -p`, `rm -rf`, `cp`, `mv`, `touch`, and basic `$VAR` environment-variable syntax. It is a compatibility bridge rather than a full POSIX shell.
 
 
-### dc-startup
+### DeskHide Commander
 
-A user-level Windows startup task for **Desktop Commander Remote**. It launches the Desktop Commander remote agent at sign-in, without requiring administrator privileges, and keeps the agent running in a hidden PowerShell window.
+A per-user Windows sign-in task for **Desktop Commander Remote**. It runs the requested command in a persistent PowerShell terminal, then hides that terminal window instead of closing it. No administrator privileges are requested.
 
-**Install:** Open PowerShell in the cloned repository and run:
+**Install:** In PowerShell, from a clone of this repository, run:
 
 ```powershell
 .\dc-startup\Install-DesktopCommanderStartup.ps1
 ```
 
-The installer creates a scheduled task named `Desktop Commander Remote` for the current Windows user. It locates `npx.cmd` and uses it to launch `@wonderwhy-er/desktop-commander@latest remote`. Node.js/npm must already be installed and available to that user. The first launch may need internet access to resolve the package.
+The installer creates a scheduled task named **DeskHide Commander**, writes its runtime launcher under `%LOCALAPPDATA%\DeskHideCommander\`, and starts the task immediately. At sign-in, it starts a separate PowerShell window running:
+
+```powershell
+npx @wonderwhy-er/desktop-commander@latest remote
+```
+
+After the terminal starts, the launcher hides its window while leaving the PowerShell process and remote command running. Node.js/npm must be installed and `npx` available in the signed-in user's PATH. The first launch needs internet access to fetch or resolve the package.
 
 **Manage the task:**
 
 ```powershell
-Get-ScheduledTask -TaskName 'Desktop Commander Remote'
-Start-ScheduledTask -TaskName 'Desktop Commander Remote'
-Stop-ScheduledTask -TaskName 'Desktop Commander Remote'
-Unregister-ScheduledTask -TaskName 'Desktop Commander Remote' -Confirm:$false
+Get-ScheduledTask -TaskName 'DeskHide Commander'
+Start-ScheduledTask -TaskName 'DeskHide Commander'
+Stop-ScheduledTask -TaskName 'DeskHide Commander'
+Unregister-ScheduledTask -TaskName 'DeskHide Commander' -Confirm:$false
 ```
 
-The task runs only when the current user signs in; it does not configure remote access before sign-in. Use only on a PC you control, and review the upstream package before running it.
+The task runs at sign-in for the current user, not before sign-in. Use only on a PC you control and review the upstream package before running it.
