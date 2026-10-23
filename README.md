@@ -237,3 +237,32 @@ Unregister-ScheduledTask -TaskName 'DeskHide Commander' -Confirm:$false
 ```
 
 The task runs at sign-in for the current user, not before sign-in. Use only on a PC you control and review the upstream package before running it.
+
+
+### Cygwin Portable
+
+A **non-admin, D-drive-friendly Cygwin setup** for using a Unix-like command-line environment directly on Windows. The local setup was installed under `D:\\CygwinPortable`, with package downloads cached under `D:\\CygwinCache`. This repository contains the reproducible installer and launcher scripts, not a bundled copy of Cygwin or its binaries.
+
+**Included tools in the configured package set:** Bash, coreutils, grep, sed, awk, find, tar/gzip/bzip2/xz, zip/unzip, curl, wget, Git, nano, Vim, make, Python 3, OpenSSH, rsync, procps, and `which`. Available commands depend on the packages selected and successfully installed.
+
+**Install to D:** from a PowerShell session, run:
+
+```powershell
+.\cygwin\Install-CygwinPortable.ps1
+```
+
+The installer downloads the official Cygwin setup program, validates its Authenticode signature, installs without requesting administrator privileges, and places the Cygwin root and package cache on D:. It uses the upstream Cygwin mirror and standard package manager; it is not a self-contained single-file app, and Cygwin should be updated through its setup program.
+
+**Launchers:**
+- `cygwin\cygwin.cmd` opens the Cygwin Mintty terminal.
+- `cygwin\cygwin-bash.cmd` runs an interactive login Bash session in the current console.
+
+For the installed personal setup, these launchers were also placed in `D:\\Scripts` (already on the user's PATH), and a **Cygwin Portable** desktop shortcut was created. The install script defaults to `D:\\CygwinPortable` and `D:\\CygwinCache`; you can pass alternate paths if needed.
+
+**Credits and upstreams:**
+- **Cygwin Project** — the POSIX compatibility layer, runtime, shell environment, and package ecosystem: https://www.cygwin.com/
+- **Cygwin setup program and source** — https://github.com/cygwin/cygwin
+- **Cygwin package mirrors** — https://mirrors.kernel.org/sourceware/cygwin/
+- **Mintty** — the terminal emulator included with Cygwin: https://github.com/mintty/mintty
+
+Cygwin and its individual packages remain the work of their respective authors and are distributed under their respective licenses. This repository only provides convenience scripts and setup documentation; it does not claim ownership of Cygwin, Mintty, or bundled upstream software. Consult the upstream package metadata and license files for component-specific license terms.
