@@ -207,3 +207,27 @@ shps -File script.sh
 ```
 
 It currently translates common commands including `echo`, `pwd`, `ls`, `cat`, `mkdir -p`, `rm -rf`, `cp`, `mv`, `touch`, and basic `$VAR` environment-variable syntax. It is a compatibility bridge rather than a full POSIX shell.
+
+
+### dc-startup
+
+A user-level Windows startup task for **Desktop Commander Remote**. It launches the Desktop Commander remote agent at sign-in, without requiring administrator privileges, and keeps the agent running in a hidden PowerShell window.
+
+**Install:** Open PowerShell in the cloned repository and run:
+
+```powershell
+.\dc-startup\Install-DesktopCommanderStartup.ps1
+```
+
+The installer creates a scheduled task named `Desktop Commander Remote` for the current Windows user. It locates `npx.cmd` and uses it to launch `@wonderwhy-er/desktop-commander@latest remote`. Node.js/npm must already be installed and available to that user. The first launch may need internet access to resolve the package.
+
+**Manage the task:**
+
+```powershell
+Get-ScheduledTask -TaskName 'Desktop Commander Remote'
+Start-ScheduledTask -TaskName 'Desktop Commander Remote'
+Stop-ScheduledTask -TaskName 'Desktop Commander Remote'
+Unregister-ScheduledTask -TaskName 'Desktop Commander Remote' -Confirm:$false
+```
+
+The task runs only when the current user signs in; it does not configure remote access before sign-in. Use only on a PC you control, and review the upstream package before running it.
