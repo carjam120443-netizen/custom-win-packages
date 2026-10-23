@@ -1,9 +1,7 @@
-# Desktop Commander Remote — per-user startup task installer
-# Installs a logon task for the current Windows user; no admin rights required.
+# DeskHide Commander — per-user startup task installer
+# Starts the requested command in a persistent PowerShell console, then hides (does not close) it.
 [CmdletBinding()]
-param(
-    [string]$TaskName = 'Desktop Commander Remote'
-)
+param([string]$TaskName = 'DeskHide Commander')
 $ErrorActionPreference = 'Stop'
 
 $npx = Get-Command 'npx.cmd' -ErrorAction SilentlyContinue
@@ -12,20 +10,51 @@ if (-not $npx) {
     throw "npx was not found on PATH. Install Node.js/npm or add its directory to this user's PATH, then run this installer again."
 }
 
-$PowerShellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
-$npxPath = $npx.Source
-# The task launches a hidden PowerShell process that runs the remote agent.
-$command = "& '$($npxPath.Replace("'", "''"))' '@wonderwhy-er/desktop-commander@latest' 'remote'"
-$encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($command))
-$arguments = "-NoLogo -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -EncodedCommand $encoded"
-$action = New-ScheduledTaskAction -Execute $PowerShellExe -Argument $arguments
-$trigger = New-ScheduledTaskTrigger -AtLogOn -User ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit ([TimeSpan]::Zero)
-$principal = New-ScheduledTaskPrincipal -UserId ([System.Security.Principal.WindowsIdentity]::GetCurrent().Name) -LogonType Interactive -RunLevel Limited
+$installDir = Join-Path $env:LOCALAPPDATA 'DeskHideCommander'
+New-Item -ItemType Directory -Path $installDir -Force | Out-Null
+$runtimePath = Join-Path $installDir 'Start-DesktopCommanderRemote.ps1'
+$npxPath = $npx.Source.Replace("'", "''")
 
-Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description 'Starts the Desktop Commander Remote agent when this user signs in.' -Force | Out-Null
+$runtime = @'
+# Runtime launcher: start a persistent PowerShell console, then hide its window.
+$ErrorActionPreference = 'Stop'
+$npxPath = '__NPX_PATH__'
+$command = "& '$npxPath' '@wonderwhy-er/desktop-commander@latest' remote"
+$encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($command))
+$ps = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+$child = Start-Process -FilePath $ps -ArgumentList @('-NoLogo','-NoProfile','-NoExit','-EncodedCommand',$encoded) -PassThru
+
+Add-Type @"
+using System;
+using System.Runtime.InteropServices;
+public static class DeskHideWindow {
+    [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+}
+"@
+# Wait up to 10 seconds for the console window, then hide it (SW_HIDE = 0).
+for ($i = 0; $i -lt 40; $i++) {
+    Start-Sleep -Milliseconds 250
+    $child.Refresh()
+    if ($child.MainWindowHandle -ne [IntPtr]::Zero) {
+        [DeskHideWindow]::ShowWindow($child.MainWindowHandle, 0) | Out-Null
+        break
+    }
+}
+'@
+$runtime = $runtime.Replace('__NPX_PATH__', $npxPath)
+Set-Content -LiteralPath $runtimePath -Value $runtime -Encoding UTF8
+
+$powerShellExe = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+$arguments = '-NoLogo -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "' + $runtimePath + '"'
+$action = New-ScheduledTaskAction -Execute $powerShellExe -Argument $arguments
+$currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+$trigger = New-ScheduledTaskTrigger -AtLogOn -User $currentUser
+$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -MultipleInstances IgnoreNew -ExecutionTimeLimit ([TimeSpan]::Zero)
+$principal = New-ScheduledTaskPrincipal -UserId $currentUser -LogonType Interactive -RunLevel Limited
+
+Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Description 'Starts Desktop Commander Remote at sign-in and hides its persistent PowerShell terminal.' -Force | Out-Null
 Write-Host "Installed scheduled task: $TaskName" -ForegroundColor Green
 Write-Host 'Starting it now...'
 Start-ScheduledTask -TaskName $TaskName
-Write-Host 'Task created and start requested. Check its status with:'
-Write-Host "Get-ScheduledTask -TaskName '$TaskName' | Get-ScheduledTaskInfo"
+Write-Host "Runtime launcher: $runtimePath"
+Write-Host ("Check status: Get-ScheduledTask -TaskName '" + $TaskName + "' | Get-ScheduledTaskInfo")
