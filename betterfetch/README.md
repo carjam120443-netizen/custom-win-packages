@@ -38,3 +38,12 @@ betterfetch/
 ├── betterfetch.ps1
 └── README.md
 ```
+
+
+## Credits & inspiration
+
+BetterFetch is an independent Windows-native PowerShell utility inspired by the system-information presentation of [Neofetch](https://github.com/dylanaraps/neofetch) and developed as an enhanced companion to this repository's **NewFetch**. It does not reuse Neofetch's Bash implementation.
+
+The fetch-tool format—system details displayed alongside terminal artwork—is the inspiration. BetterFetch's Windows registry/CIM data collection, PATH discovery, command-line switches, and PowerShell implementation are specific to this project.
+
+Neofetch remains the work of its original authors and contributors. See its upstream repository for its license and notices.
