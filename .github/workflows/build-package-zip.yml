@@ -20,7 +20,7 @@ jobs:
         run: |
           rm -f custom-win-packages.zip
           zip -r custom-win-packages.zip \
-            newfetch which pkg commenter starship starinit and \
+            betterfetch newfetch which pkg commenter starship starinit and \
             README.md windows-logo.svg open-source.svg \
             .gitignore \
             -x "*.git/*"
