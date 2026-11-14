@@ -52,6 +52,22 @@ newfetch -NoColor
 newfetch -Help
 ```
 
+
+### betterfetch
+
+An enhanced, Windows-native fetch utility and companion to `newfetch`. It reports the Windows product/release version (including DisplayVersion such as 25H2 or 26H2), build and revision, edition, install type, hardware, uptime, PowerShell/terminal, display, memory, and system-drive capacity. It also discovers executable and script commands available through the current user's effective PATH.
+
+**Commands:**
+```powershell
+betterfetch
+betterfetch -Short
+betterfetch -NoColor
+betterfetch -NoApps
+betterfetch -Help
+```
+
+The output includes colored labels and perspective-style ASCII artwork. The artwork is text-based rather than true 3D rendering. PATH discovery reports available commands, not every installed graphical application. See [betterfetch/README.md](betterfetch/README.md) for details.
+
 ### which
 
 A native PowerShell Windows port of the familiar Unix `which` command.
