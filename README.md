@@ -325,7 +325,7 @@ This section records the projects, conventions, and upstream tools that influenc
 - **The Unix-like `which` command** — inspiration for the name and command lookup behavior of the PowerShell `which` wrapper. Its implementation uses PowerShell's `Get-Command`.
 - **WinGet / Windows Package Manager** ([microsoft/winget-cli](https://github.com/microsoft/winget-cli)) — the actual package-management backend used by `pkg`. The short `pkg` name and interface are a Unix-style convenience; this project does not implement a separate package manager.
 - **POSIX shell conventions and common Unix command names** — the compatibility ideas behind `shps`. It is a limited PowerShell bridge, not a POSIX shell implementation.
-- **C-style block-comment notation** — the visual convention behind `commenter`'s `/*"text"*/` format. The helper and its PowerShell integration are original to this repository.
+- **The familiar `echo` command** — inspiration for `commenter`'s simple text-output purpose. Its `/*\"text\"*/` display format and PSReadLine integration are custom conventions from this repository; they are not C-style block comments.
 
 ### Prompt and theme tooling
 
