@@ -309,3 +309,34 @@ Credits and upstreams:
 - Mintty — the terminal emulator included with Cygwin: https://github.com/mintty/mintty
 
 Cygwin and its individual packages remain the work of their respective authors and are distributed under their respective licenses. This repository only provides convenience scripts and setup documentation; it does not claim ownership of Cygwin, Mintty, or third-party software. Consult upstream package metadata and license files for component-specific license terms.
+
+
+## Credits & inspiration
+
+This section records the projects, conventions, and upstream tools that influenced or are used by packages in this repository. Inspiration and compatibility references do not mean that source code was copied. Third-party software and community themes remain under their own licenses; see their upstream repositories for full notices.
+
+### Fetch utilities
+
+- **[Neofetch](https://github.com/dylanaraps/neofetch)** — inspiration for NewFetch's system-information-beside-ASCII-art presentation and the general fetch-tool experience. NewFetch is an independent PowerShell implementation, not a port of Neofetch's Bash source.
+- **NewFetch** — BetterFetch's starting point and in-repository predecessor. BetterFetch expands the Windows information collected and adds PATH command discovery, colored labels, and perspective-style ASCII artwork. The fetch-tool presentation also follows the Neofetch tradition.
+
+### Command-line utilities
+
+- **The Unix-like `which` command** — inspiration for the name and command lookup behavior of the PowerShell `which` wrapper. Its implementation uses PowerShell's `Get-Command`.
+- **WinGet / Windows Package Manager** ([microsoft/winget-cli](https://github.com/microsoft/winget-cli)) — the actual package-management backend used by `pkg`. The short `pkg` name and interface are a Unix-style convenience; this project does not implement a separate package manager.
+- **POSIX shell conventions and common Unix command names** — the compatibility ideas behind `shps`. It is a limited PowerShell bridge, not a POSIX shell implementation.
+- **C-style block-comment notation** — the visual convention behind `commenter`'s `/*"text"*/` format. The helper and its PowerShell integration are original to this repository.
+
+### Prompt and theme tooling
+
+- **[Starship](https://github.com/starship/starship)** — upstream prompt engine and configuration format used by the Starship setup and `starinit`. The `linux-like` theme is an original configuration for this repository.
+- **[Dracula](https://github.com/dracula/starship)** — source inspiration for the included Dracula Starship theme. Its original attribution and MIT license notice are retained in the theme file.
+- **[Catppuccin](https://github.com/catppuccin/starship)** — source inspiration for the included Catppuccin Macchiato and Mocha Starship themes. Their original attribution and MIT license notices are retained in the theme files.
+
+### External tools and compatibility layers
+
+- **[Desktop Commander](https://github.com/wonderwhy-er/desktop-commander)** — upstream project invoked by the DeskHide Commander sign-in launcher. This repository provides the Windows startup convenience script, not Desktop Commander's implementation.
+- **[Cygwin](https://www.cygwin.com/)** and its [setup source](https://github.com/cygwin/cygwin) — upstream POSIX-compatible environment used by the Cygwin Portable installer. **[Mintty](https://github.com/mintty/mintty)** supplies the terminal emulator. Cygwin and Mintty are separately maintained projects.
+- **Wikimedia Commons** — source of the [Windows logo SVG](https://commons.wikimedia.org/wiki/File:Windows_logo_-_2021.svg) and [Tux SVG](https://commons.wikimedia.org/wiki/File:Tux.svg) used in this README. See each file page for its license, attribution, and trademark information.
+
+Thanks to the maintainers and contributors behind these projects. Please consult each upstream project's license and attribution files before redistributing any third-party component.
