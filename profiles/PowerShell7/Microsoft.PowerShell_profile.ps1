@@ -94,3 +94,61 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
 
 # Optional Starship initializer; call starinit theme select <name> to choose a theme.
 # The package launcher is placed on PATH above when the repository is available.
+
+
+# Native PowerShell 7 entry points for repository scripts.
+# These functions invoke the .ps1 implementations directly, avoiding the
+# Windows PowerShell 5.1 .cmd launchers when running inside pwsh.
+function Invoke-CwpScript {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, Position=0)][string]$Package,
+        [Parameter(Position=1)][string[]]$Arguments
+    )
+    if ([string]::IsNullOrWhiteSpace($env:CUSTOM_WIN_PACKAGES_ROOT)) {
+        throw 'Set CUSTOM_WIN_PACKAGES_ROOT to the custom-win-packages checkout directory.'
+    }
+    $scriptPath = Join-Path $env:CUSTOM_WIN_PACKAGES_ROOT "$Package\$Package.ps1"
+    if (-not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) {
+        throw "custom-win-packages script not found: $scriptPath"
+    }
+    & $scriptPath @Arguments
+}
+
+function newfetch {
+    [CmdletBinding()]
+    param([switch]$Short,[switch]$NoColor,[switch]$Help)
+    $a=@(); if($Short){$a+='-Short'}; if($NoColor){$a+='-NoColor'}; if($Help){$a+='-Help'}
+    Invoke-CwpScript 'newfetch' $a
+}
+function betterfetch {
+    [CmdletBinding()]
+    param([switch]$Short,[switch]$NoColor,[switch]$NoApps,[switch]$Help)
+    $a=@(); if($Short){$a+='-Short'}; if($NoColor){$a+='-NoColor'}; if($NoApps){$a+='-NoApps'}; if($Help){$a+='-Help'}
+    Invoke-CwpScript 'betterfetch' $a
+}
+function which {
+    [CmdletBinding()]
+    param([Parameter(Position=0,ValueFromRemainingArguments=$true)][string[]]$Name)
+    Invoke-CwpScript 'which' $Name
+}
+function shps {
+    [CmdletBinding()]
+    param([Parameter(Position=0,ValueFromRemainingArguments=$true)][string[]]$Arguments)
+    Invoke-CwpScript 'shps' $Arguments
+}
+function and {
+    [CmdletBinding()]
+    param([Parameter(Position=0,ValueFromRemainingArguments=$true)][string[]]$Commands)
+    Invoke-CwpScript 'and' $Commands
+}
+function starinit {
+    [CmdletBinding()]
+    param([Parameter(Position=0)][string]$Command='theme',
+          [Parameter(Position=1)][string]$Subcommand,
+          [Parameter(Position=2)][string]$Theme)
+    $scriptPath=Join-Path $env:CUSTOM_WIN_PACKAGES_ROOT 'starinit\starinit.ps1'
+    if(-not(Test-Path -LiteralPath $scriptPath -PathType Leaf)){throw "starinit script not found: $scriptPath"}
+    & $scriptPath $Command $Subcommand $Theme
+}
+
