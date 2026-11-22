@@ -8,12 +8,10 @@
       "type": "prompt",
       "alignment": "left",
       "segments": [
-        { "type": "text", "style": "plain", "foreground": "#87D7FF", "template": "🐧 " },
-        { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "╭─[" },
+        { "type": "text", "style": "plain", "foreground": "#87D7FF", "template": "<🐧 ─[" },
         { "type": "session", "style": "plain", "foreground": "#FFFFFF", "template": "{{ .UserName }}@{{ .HostName }}" },
-        { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "]─[" },
+        { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "]シ[" },
         { "type": "path", "style": "plain", "foreground": "#87D7FF", "template": "{{ .Path }}" },
-        { "type": "git", "style": "plain", "foreground": "#D7AF5F", "template": " {{ .HEAD }}{{ if .Working.Changed }}*{{ end }}{{ if .Staging.Changed }}+{{ end }}" },
         { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "]" }
       ]
     },
@@ -21,20 +19,10 @@
       "type": "prompt",
       "alignment": "left",
       "segments": [
-        { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "╰─[" },
-        { "type": "status", "style": "plain", "foreground": "#5FD7AF", "foreground_templates": ["{{ if .Error }}#FF5F5F{{ end }}"], "template": "{{ if .Error }}ERROR{{ else }}READY{{ end }}" },
-        { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "] $ " }
-      ]
-    },
-    {
-      "type": "prompt",
-      "alignment": "right",
-      "segments": [
-        { "type": "executiontime", "style": "plain", "foreground": "#808080", "template": " {{ .FormattedMs }} " },
-        { "type": "time", "style": "plain", "foreground": "#87D7FF", "template": "{{ .CurrentDate | date .Format }}", "properties": { "time_format": "15:04:05" } }
+        { "type": "text", "style": "plain", "foreground": "#5FD7AF", "template": "/> " }
       ]
     }
   ],
-  "transient_prompt": { "foreground": "#5FD7AF", "background": "transparent", "template": "❯ " },
+  "transient_prompt": { "foreground": "#5FD7AF", "background": "transparent", "template": "/> " },
   "secondary_prompt": { "foreground": "#87D7FF", "background": "transparent", "template": "… " }
 }
