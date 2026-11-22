@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [string]$RepositoryPath = (Split-Path -Parent $PSScriptRoot)
+    [string]$RepositoryPath = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 )
 
 $ErrorActionPreference = 'Stop'
