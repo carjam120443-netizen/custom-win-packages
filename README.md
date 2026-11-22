@@ -124,6 +124,41 @@ and press Enter, the line is treated as a non-command comment and is not execute
 
 This interactive syntax is handled before PowerShell parses the line, so it does not require changing PowerShell itself.
 
+### PowerShell 7 profile
+
+A separate PowerShell 7 profile is included at
+`profiles/PowerShell7/Microsoft.PowerShell_profile.ps1`. It is kept separate
+from the Windows PowerShell 5.1 profile because the two editions use different
+profile paths and startup behavior.
+
+**Load it from your PowerShell 7 profile** (from a clone of this repository):
+
+```powershell
+$repo = (Resolve-Path .).Path
+$profileDir = Split-Path -Parent $PROFILE
+New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
+Add-Content -Path $PROFILE -Value ("`n. '" + $repo + "\profiles\PowerShell7\Microsoft.PowerShell_profile.ps1'")
+. $PROFILE
+```
+
+Alternatively, copy the included profile file to the path shown by
+`$PROFILE` in PowerShell 7. The profile adds the repository's package
+directories to the current user's PATH and provides the `pkg`/`apt`,
+`commenter`, `omp`, and `theme-switch` helpers. Oh My Posh support is
+optional; the profile still loads if it is not installed. Set
+`CUSTOM_WIN_PACKAGES_ROOT` if the repository is stored somewhere other than
+the profile's expected relative location.
+
+To verify:
+
+```powershell
+$PSVersionTable.PSVersion
+Get-Command pkg, apt, commenter, theme-switch -ErrorAction SilentlyContinue
+theme-switch
+```
+
+The profile does not overwrite the Windows PowerShell 5.1 profile.
+
 ### Installation
 
 Clone or download the repository, then place the package directory somewhere on your PATH.
