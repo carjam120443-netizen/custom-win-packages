@@ -57,21 +57,31 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     function theme-switch {
         param([Parameter(Position = 0)][string]$Name)
 
-        $themeDirectory = $env:POSH_THEMES_PATH
-        if ([string]::IsNullOrWhiteSpace($themeDirectory)) {
-            $themeDirectory = Join-Path $HOME '.poshthemes'
+        $themeDirectories = @()
+        if (-not [string]::IsNullOrWhiteSpace($env:POSH_THEMES_PATH)) {
+            $themeDirectories += $env:POSH_THEMES_PATH
+        } else {
+            $themeDirectories += (Join-Path $HOME '.poshthemes')
         }
 
-        if (-not (Test-Path $themeDirectory -PathType Container)) {
-            Write-Host "Oh My Posh themes directory not found: $themeDirectory" -ForegroundColor Yellow
-            return
+        # Include themes shipped with this repository (including hackerman).
+        if (-not [string]::IsNullOrWhiteSpace($env:CUSTOM_WIN_PACKAGES_ROOT)) {
+            $customThemeDirectory = Join-Path $env:CUSTOM_WIN_PACKAGES_ROOT 'themes'
+            if (Test-Path $customThemeDirectory -PathType Container) {
+                $themeDirectories += $customThemeDirectory
+            }
         }
 
-        $themes = @(Get-ChildItem -Path $themeDirectory -Filter '*.omp.json' -File |
-            Sort-Object BaseName)
+        $themes = @(
+            foreach ($directory in ($themeDirectories | Select-Object -Unique)) {
+                if (Test-Path $directory -PathType Container) {
+                    Get-ChildItem -Path $directory -Filter '*.omp.json' -File
+                }
+            }
+        ) | Sort-Object BaseName, FullName
 
         if ([string]::IsNullOrWhiteSpace($Name)) {
-            $themes | Select-Object -ExpandProperty BaseName
+            $themes | Select-Object -ExpandProperty BaseName -Unique
             return
         }
 
@@ -82,7 +92,7 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
         if (-not $selected) {
             Write-Host "Theme not found: $Name" -ForegroundColor Yellow
             Write-Host 'Available themes:'
-            $themes | Select-Object -ExpandProperty BaseName
+            $themes | Select-Object -ExpandProperty BaseName -Unique
             return
         }
 
@@ -151,4 +161,3 @@ function starinit {
     if(-not(Test-Path -LiteralPath $scriptPath -PathType Leaf)){throw "starinit script not found: $scriptPath"}
     & $scriptPath $Command $Subcommand $Theme
 }
-
