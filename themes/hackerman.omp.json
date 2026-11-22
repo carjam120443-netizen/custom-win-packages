@@ -1,0 +1,120 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 3,
+  "final_space": true,
+  "console_title_template": "{{ .UserName }}@{{ .HostName }} :: HACKERMAN",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "┌─["
+        },
+        {
+          "type": "os",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "{{ .Icon }}"
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": " "
+        },
+        {
+          "type": "session",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "{{ .UserName }}@{{ .HostName }}"
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "]─["
+        },
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "#00FFFF",
+          "template": "{{ .Path }}"
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "#FFFF00",
+          "template": " {{ .HEAD }}{{ if .Working.Changed }}*{{ end }}{{ if .Staging.Changed }}+{{ end }}"
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "]"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "└─["
+        },
+        {
+          "type": "status",
+          "style": "plain",
+          "foreground": "#FF5555",
+          "foreground_templates": [
+            "{{ if .Error }}#FF3333{{ else }}#00FF66{{ end }}"
+          ],
+          "template": "{{ if .Error }}ERR {{ .String }}{{ else }}READY{{ end }}"
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#00FF66",
+          "template": "] $ "
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "executiontime",
+          "style": "plain",
+          "foreground": "#888888",
+          "template": " {{ .FormattedMs }} "
+        },
+        {
+          "type": "time",
+          "style": "plain",
+          "foreground": "#00FFFF",
+          "template": "{{ .CurrentDate | date .Format }}",
+          "properties": {
+            "time_format": "15:04:05"
+          }
+        }
+      ]
+    }
+  ],
+  "transient_prompt": {
+    "foreground": "#00FF66",
+    "background": "transparent",
+    "template": "» "
+  },
+  "secondary_prompt": {
+    "foreground": "#00FF66",
+    "background": "transparent",
+    "template": "… "
+  }
+}
