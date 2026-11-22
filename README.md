@@ -187,6 +187,36 @@ The included `.cmd` launchers run the PowerShell implementations or native Windo
 
 No Scoop package is required.
 
+## PowerShell 7 profile
+
+The repository includes a PowerShell 7 (pwsh) profile with native command wrappers for the package scripts. It keeps the PowerShell 5.1 profile separate and does not overwrite an existing PowerShell 7 profile.
+
+**Included commands:** `pkg`, `apt`, `commenter`, `newfetch`, `betterfetch`, `which`, `shps`, `and`, `starinit`, `omp`, and `theme-switch`.
+
+The profile calls the repository's `.ps1` implementations directly for `newfetch`, `betterfetch`, `which`, `shps`, `and`, and `starinit`, rather than routing those calls through the legacy `.cmd` launchers. `pkg` and `apt` forward arguments to WinGet. Oh My Posh helpers are enabled only when `oh-my-posh` is available.
+
+### Install
+
+Open PowerShell 7 (`pwsh`) in the repository checkout and run:
+
+```powershell
+.\profiles\PowerShell7\Install-Profile.ps1
+```
+
+The installer adds a dot-source hook to the current user's PowerShell 7 profile. It creates the profile directory if needed, backs up an existing profile before editing it, and does not overwrite the rest of the profile. Reload it with:
+
+```powershell
+. $PROFILE
+```
+
+If the repository is somewhere other than the default checkout location, pass its path:
+
+```powershell
+.\profiles\PowerShell7\Install-Profile.ps1 -RepositoryPath 'D:\path\to\custom-win-packages'
+```
+
+The profile derives package paths from the repository checkout, so keep the checkout in place after installation. It also adds the supported package directories to the current session's PATH. This setup is per-user and does not require administrator privileges.
+
 ## Why?
 
 The original Neofetch is a Bash-based project. This repository is for Windows-native alternatives that fit better into a normal PowerShell / Windows Terminal environment.
